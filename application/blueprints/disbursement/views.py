@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Disbursement
 from application.extensions import db
-from sqlalchemy.orm.exc import NoResultFound
 from .forms import Form
 from .. user import User
 
@@ -26,11 +25,21 @@ def add():
     form = Form(Disbursement)
     if request.method == "POST":
         disbursement = Disbursement()
+
         form.post(request, disbursement)
+        
+        for i, detail_form in enumerate(form.details):
+            if detail_form.is_dirty():
+                detail_form.post(request, disbursement.disbursement_details[i])
 
         if form.validate_on_submit():
             db.session.add(disbursement)
+            for i, detail_obj in enumerate(disbursement.disbursement_details):
+                if form.details[i].is_dirty():
+                    detail_obj.disbursement_id = disbursement.id
+                    db.session.add(detail_obj)
             db.session.commit()
+            
             return redirect(url_for('disbursement.home'))
         
     context = {

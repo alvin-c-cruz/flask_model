@@ -24,6 +24,27 @@
                 {{ form.html_tag('user_id', css_class="form-select", options=user_options, required=True, autocomplete=False) | safe }}
             </div>
         </div>
+
+        <div class="details">
+            <div class="row">
+                <div class="col-8">
+                    <span>Descrition</span>
+                </div>
+                <div class="col-4">
+                    <span>Amount</span>
+                </div>
+            </div>
+            {% for i, form_detail in form.enumerated_details() %}
+            <div class="row">
+                <div class="col-8">
+                    {{ form_detail.html_tag('description', css_class="form-control", autocomplete=False) | safe }}
+                </div>
+                <div class="col-4">
+                    {{ form_detail.html_tag('amount', css_class="form-control") | safe }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
         
         <div class="row mb-3">
             <input type="Submit" class="btn btn-success form-control" value="Submit">
