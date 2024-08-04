@@ -7,4 +7,4 @@ class Form(MyForm):
         if not self.user_id:
             self.errors["user_id"] = "Please select user."
 
-        return self.errors
+        return True if not self.errors else False

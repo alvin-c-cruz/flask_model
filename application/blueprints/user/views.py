@@ -25,7 +25,7 @@ def add():
     if request.method == "POST":
         user = User()
         form.post(request, user)
-        print(form.validate_on_submit())
+        
         if form.validate_on_submit():
             db.session.add(user)
             db.session.commit()

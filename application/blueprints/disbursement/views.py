@@ -1,7 +1,9 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Disbursement
 from application.extensions import db
+from sqlalchemy.orm.exc import NoResultFound
 from .forms import Form
+from .. user import User
 
 
 bp = Blueprint('disbursement', __name__, template_folder="pages", url_prefix="/disbursement")
@@ -9,44 +11,66 @@ bp = Blueprint('disbursement', __name__, template_folder="pages", url_prefix="/d
 
 @bp.route("/")
 def home():
+    disbursements = Disbursement.query.all()
+    
+    context = {
+        "disbursements": disbursements
+    }
 
-    return render_template("disbursement/home.html")
+    return render_template("disbursement/home.html", **context)
 
 
 @bp.route("/add", methods=["POST", "GET"])
 def add():
+    user_options = [(user.id, user) for user in User.query.order_by("first_name", "last_name").all()]
     form = Form(Disbursement)
     if request.method == "POST":
-        user = Disbursement()
-        form.post(request, user)
-        
-    print(form())
+        disbursement = Disbursement()
+        form.post(request, disbursement)
 
+        if form.validate_on_submit():
+            db.session.add(disbursement)
+            db.session.commit()
+            return redirect(url_for('disbursement.home'))
+        
     context = {
         "form": form,
+        "user_options": user_options
     }
 
     return render_template("disbursement/form.html", **context)
 
 
-@bp.route("/edit/<int:record_id>", methods=["POST", "GET"])
-def edit(record_id):
-    record = Disbursement.query.get_or_404(record_id)
+# @bp.route("/edit/<int:record_id>", methods=["POST", "GET"])
+# def edit(record_id):
+#     user = User.query.get_or_404(record_id)
+#     form = Form(User)
 
-    if request.method == "POST":
-        record.post(request.form)
-        errors = record.errors
+#     if request.method == "POST":
+#         form.post(request, user)
+#         if form.validate_on_submit():
+#             db.session.commit()
+#             return redirect(url_for('user.home'))
+#     else:
+#         form.get(user)
 
-        if not errors:
-            db.session.commit()
-    else:
-        errors = {}
+#     context = {
+#         "form": form,
+#     }
 
-    context = {
-        "record": record,
-        "column_types": record.column_types,
-        "errors": errors,
-    }
+#     return render_template("user/form.html", **context)
 
-    return render_template("disbursement/form.html", **context)
 
+# @bp.route("/delete/<int:record_id>", methods=["POST", "GET"])
+# def delete(record_id):
+#     user = User.query.get_or_404(record_id)
+    
+#     try:
+#         db.session.delete(user)
+#         db.session.commit()
+#         flash("User deleted successfully.", "success")
+#     except Exception as e:
+#         db.session.rollback()
+#         flash("An error occurred while trying to delete the user.", "error")
+    
+#     return redirect(url_for("user.home"))

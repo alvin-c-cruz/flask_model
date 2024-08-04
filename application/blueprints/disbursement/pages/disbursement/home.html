@@ -1,3 +1,47 @@
+{% extends "base.html" %}
+
 {% block content %}
-<a href="{{ url_for('disbursement.add') }}">Add Disbursement</a>
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4"></div>
+        <div class="col-4">
+            <a href="{{ url_for('disbursement.add') }}" class="btn btn-success">Add Disbursement</a>
+        </div>
+    </div>
+
+    <div class="row bg-light">
+        <div class="col-4 border p-2">
+            <span>ID</span>
+        </div>
+        <div class="col-4 border p-2">
+            <span>User</span>
+        </div>
+        <div class="col-4 border p-2">
+            <span>Actions</span>
+        </div>
+    </div>
+
+    {% for disbursement in disbursements %}
+    <div class="row">
+        <div class="col-4 border p-2">
+            {{ disbursement.id }}
+        </div>
+        <div class="col-4 border p-2">
+            {{ disbursement.user }}
+        </div>
+        <div class="col-4 border p-2">
+            <a href="#" class="btn btn-success">Edit</a>
+            <a href="#" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="row border p-2">
+        <span>No record found.</span>
+    </div>    
+    {% endfor %}
+</div>
+
 {% endblock %}

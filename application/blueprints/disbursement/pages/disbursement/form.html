@@ -5,14 +5,14 @@
 <div class="container">
     <h1 class="mb-4">{% if form.id %}Edit{% else %}Add{% endif %}Record Details</h1>
     <form action="{% if form.id %} {{ url_for('disbursement.edit', record_id=form.id) }} {% else %} {{ url_for('disbursement.add') }} {% endif %}" method="post">
-        {{ form.html_tag('id', disabled=True) | safe }}
+        {{ form.html_tag('id', hidden=True) | safe }}
         
         <div class="row mb-3">
             <div class="col-4">
                 <label for="user_id">User</label>
             </div>
             <div class="col-8">
-                {{ form.html_tag('user_id', css_class="form-control", autofocus=True, list="users", required=True) | safe }}
+                {{ form.html_tag('user_id', css_class="form-select", autofocus=True, options=user_options, required=True, autocomplete=False) | safe }}
             </div>
         </div>
         
@@ -21,8 +21,9 @@
         </div>
 
         <datalist id="users">
-            {% for user in users %}
-            <option value="{{ user }}">
+            <option value="0"></option>
+                {% for user in users %}
+            <option value="{{ user.id }}">{{ user }}</option>
             {% endfor %}
         </datalist>
     </form>

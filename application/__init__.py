@@ -1,6 +1,6 @@
 from flask import Flask
 from .extensions import db, migrate
-from .blueprints import user
+from .blueprints import user, disbursement
 
 
 def create_app():
@@ -13,6 +13,7 @@ def create_app():
         return "Hello World"
     
     app.register_blueprint(user.bp)
+    app.register_blueprint(disbursement.bp)
     
     db.init_app(app)
     migrate.init_app(app=app, db=db)
