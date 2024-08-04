@@ -13,26 +13,32 @@
     </div>
 
     <div class="row bg-light">
-        <div class="col-4 border p-2">
+        <div class="col-3 border p-2">
             <span>ID</span>
         </div>
-        <div class="col-4 border p-2">
+        <div class="col-3 border p-2">
+            <span>Date</span>
+        </div>
+        <div class="col-3 border p-2">
             <span>User</span>
         </div>
-        <div class="col-4 border p-2">
+        <div class="col-3 border p-2">
             <span>Actions</span>
         </div>
     </div>
 
     {% for disbursement in disbursements %}
     <div class="row">
-        <div class="col-4 border p-2">
+        <div class="col-3 border p-2">
             {{ disbursement.id }}
         </div>
-        <div class="col-4 border p-2">
+        <div class="col-3 border p-2">
+            {{ disbursement.record_date }}
+        </div>
+        <div class="col-3 border p-2">
             {{ disbursement.user }}
         </div>
-        <div class="col-4 border p-2">
+        <div class="col-3 border p-2">
             <a href="#" class="btn btn-success">Edit</a>
             <a href="#" class="btn btn-danger">Delete</a>
         </div>
