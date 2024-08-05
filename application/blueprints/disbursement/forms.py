@@ -1,11 +1,13 @@
 from my_form import MyForm
 from .models import DisbursementDetail
+import json
 
 DETAIL_ROWS = 10
 
 
 class SubForm(MyForm):
     def validate_on_submit(self):
+        #  Validates the form fields and populates the errors dictionary if any fields are missing.
         self.errors = {}
 
         if not self.description:
@@ -17,7 +19,11 @@ class SubForm(MyForm):
         return True if not self.errors else False
 
     def is_dirty(self):
+        #  Determines if any of the form fields are not empty).
         return any([self.description, self.amount])
+    
+    def __str__(self):
+        return json.dumps({"description": self.description, "amount": self.amount}, indent=4)
 
 
 class Form(MyForm):
@@ -29,7 +35,6 @@ class Form(MyForm):
             self.details.append(SubForm(DisbursementDetail))
 
     def enumerated_details(self):
-        print(enumerate(self.details))
         return enumerate(self.details)
 
     def validate_on_submit(self):
