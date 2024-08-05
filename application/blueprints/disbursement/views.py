@@ -94,17 +94,21 @@ def edit(record_id):
     return render_template("disbursement/form.html", **context)
 
 
-
-# @bp.route("/delete/<int:record_id>", methods=["POST", "GET"])
-# def delete(record_id):
-#     user = User.query.get_or_404(record_id)
+@bp.route("/delete/<int:record_id>")
+def delete(record_id):
+    # Retrieve the disbursement record or return a 404 if not found
+    disbursement = Disbursement.query.get_or_404(record_id)
     
-#     try:
-#         db.session.delete(user)
-#         db.session.commit()
-#         flash("User deleted successfully.", "success")
-#     except Exception as e:
-#         db.session.rollback()
-#         flash("An error occurred while trying to delete the user.", "error")
+    # Delete all associated DisbursementDetail records
+    for detail in disbursement.disbursement_details:
+        db.session.delete(detail)
     
-#     return redirect(url_for("user.home"))
+    # Delete the Disbursement record itself
+    db.session.delete(disbursement)
+    
+    # Commit the transaction to save changes
+    db.session.commit()
+    
+    # Flash a success message and redirect to the home page
+    flash('Disbursement and its details have been successfully deleted.', 'success')
+    return redirect(url_for('disbursement.home'))
