@@ -1,37 +1,5 @@
-{% macro form_field(record, field_name, column_types, field_label, errors={}, options=[]) %}
-    <label for="{{ field_name }}">{{ field_label }}</label>
-    {% set column_type = column_types[field_name] if field_name in column_types else "text" %}
-    
-    {% if column_type == "select" %}
-        <select name="{{ field_name }}" id="{{ field_name }}">
-            <!-- Options should be dynamically generated based on your requirements -->
-            <option value="">Select an option</option>
-            <!-- Example options -->
-            <option value="1" {% if record[field_name] == "1" %}selected{% endif %}>Option 1</option>
-            <option value="2" {% if record[field_name] == "2" %}selected{% endif %}>Option 2</option>
-        </select>
-        
-    {% elif column_type == "BOOLEAN" %}
-        <input type="checkbox" name="{{ field_name }}" id="{{ field_name }}" {% if record[field_name] %}checked{% endif %}>
-
-    {% elif column_type == "VARCHAR" %}
-        <input type="text" name="{{ field_name }}" id="{{ field_name }}" value="{% if record[field_name] %}{{ record[field_name] | e }}{% endif %}">
-
-    {% elif column_type == "number" %}
-        <input type="number" name="{{ field_name }}" id="{{ field_name }}" value="{{ record[field_name] | e }}">
-
-    {% elif column_type == "date" %}
-        <input type="date" name="{{ field_name }}" id="{{ field_name }}" value="{{ record[field_name] | e }}">
-
-    {% elif column_type == "email" %}
-        <input type="email" name="{{ field_name }}" id="{{ field_name }}" value="{{ record[field_name] | e }}">
-
-    {% else %}
-        <input type="text" name="{{ field_name }}" id="{{ field_name }}" value="{{ record[field_name] | e }}">
-
-    {% endif %}
-
-    {% if errors[field_name] %}
-    <span>{{ record.errors[field_name] }}</span>
+{% macro error_message(form, field_name) %}
+    {% if form.errors.get(field_name) %}
+    <span class="text-danger">{{ form.errors.get(field_name) }}</span>
     {% endif %}
 {% endmacro %}
