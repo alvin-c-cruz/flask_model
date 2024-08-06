@@ -1,0 +1,10 @@
+{% from 'macros.html' import form_field %}
+
+{% block content %}
+    <h1>Record Details</h1>
+    <form action="{% if record.id %} {{ url_for('user.edit', record_id=record.id) }} {% else %} {{ url_for('user.add') }} {% endif %}" method="post">
+        <p>{{ form_field(record, "first_name", column_types, "First Name", errors) }}</p>
+        <p>{{ form_field(record, "last_name", column_types, "last Name", errors) }}</p>
+        <input type="Submit" value="Submit">
+    </form>
+{% endblock %}
