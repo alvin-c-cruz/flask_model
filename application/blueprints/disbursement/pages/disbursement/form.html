@@ -28,7 +28,7 @@
         <div class="details">
             <div class="row">
                 <div class="col-8">
-                    <span>Descrition</span>
+                    <span>Description</span>
                 </div>
                 <div class="col-4">
                     <span>Amount</span>
@@ -37,10 +37,10 @@
             {% for i, form_detail in form.enumerated_details() %}
             <div class="row">
                 <div class="col-8">
-                    {{ form_detail.html_tag('description', css_class="form-control", autocomplete=False) | safe }}
+                    {{ form_detail.html_tag('description', i=i, css_class="form-control", autocomplete=False) | safe }}
                 </div>
                 <div class="col-4">
-                    {{ form_detail.html_tag('amount', css_class="form-control") | safe }}
+                    {{ form_detail.html_tag('amount', i=i, css_class="form-control") | safe }}
                 </div>
             </div>
             {% endfor %}

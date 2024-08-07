@@ -17,7 +17,7 @@ class SubForm(MyForm):
         return True if not self.errors else False
 
     def is_dirty(self):
-        return any([getattr(self, column) for column in self.get_columns().keys()])
+        return any([self.description, self.amount])
 
 
 class Form(MyForm):
@@ -29,6 +29,7 @@ class Form(MyForm):
             self.details.append(SubForm(DisbursementDetail))
 
     def enumerated_details(self):
+        print(enumerate(self.details))
         return enumerate(self.details)
 
     def validate_on_submit(self):
